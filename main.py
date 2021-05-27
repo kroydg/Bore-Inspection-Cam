@@ -43,7 +43,7 @@ def findpattern(region):
     return current_val, current_loc, current_string, current_result, h, w
 
 
-for img in glob.glob("Images/Samples/*.BMP"):
+for img in sorted(glob.glob("Images/Samples/*.BMP")):
 
     frame = cv2.imread(img)
     frame_copy = frame.copy()
@@ -100,14 +100,15 @@ for img in glob.glob("Images/Samples/*.BMP"):
     cv2.imshow('Region3', current_result_r3)
     cv2.imshow('Region4', current_result_r4)
     cv2.imshow('Matching Result', frame_copy)
-    #cv2.imwrite('Example_Result.jpg', frame_copy)
-    cv2.moveWindow('Region 4', 340, 300)
-
+    cv2.moveWindow('Region4', 490, 425)
+    cv2.moveWindow('Region3', 340, 425)
+    cv2.moveWindow('Region2', 150, 425)
+    cv2.moveWindow('Region1', 0, 425)
 
     print(img)
     print(current_string_r1, current_string_r2, current_string_r3, current_string_r4)
 
-    time.sleep(1)
+    #time.sleep(1)
     key = cv2.waitKey(1)
     if key == 32:
         cv2.waitKey()
