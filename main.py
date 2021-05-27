@@ -8,6 +8,7 @@ def findpattern(region):
     current_val = 0
     current_loc = []
     current_string = ''
+
     current_result = []
 
     for A in glob.glob("Images/A_Template/*.jpg"):
@@ -47,6 +48,7 @@ for img in glob.glob("Images/Samples/*.BMP"):
     frame = cv2.imread(img)
     frame_copy = frame.copy()
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    WHITE = (255, 255, 255)
     # methods = [cv2.TM_CCOEFF, cv2.TM_CCOEFF_NORMED, cv2.TM_CCORR,cv2.TM_CCORR_NORMED, cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]
 
     # Define 4 search regions
@@ -67,21 +69,21 @@ for img in glob.glob("Images/Samples/*.BMP"):
     current_val_r4, current_loc_r4, current_string_r4, current_result_r4, h4, w4 = findpattern(region4)
 
     # Display result and score
-    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r1, (5, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 1)
-    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r2, (167, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 1)
-    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r3, (331, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 1)
-    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r4, (490, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 1)
+    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r1, (5, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 1)
+    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r2, (167, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 1)
+    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r3, (331, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 1)
+    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r4, (490, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 1)
 
     cv2.putText(frame_copy, 'Confidence = %.1f' % (current_val_r1 * 100), (5, 170), cv2.FONT_HERSHEY_SIMPLEX,
-                0.5, 255, 1)
+                0.5, WHITE, 1)
     cv2.putText(frame_copy, 'Confidence = %.1f' % (current_val_r2 * 100), (167, 170), cv2.FONT_HERSHEY_SIMPLEX,
-                0.5, 255, 1)
+                0.5, WHITE, 1)
     cv2.putText(frame_copy, 'Confidence = %.1f' % (current_val_r3 * 100), (331, 170), cv2.FONT_HERSHEY_SIMPLEX,
-                0.5, 255, 1)
+                0.5, WHITE, 1)
     cv2.putText(frame_copy, 'Confidence = %.1f' % (current_val_r4 * 100), (490, 170), cv2.FONT_HERSHEY_SIMPLEX,
-                0.5, 255, 1)
+                0.5, WHITE, 1)
 
-    cv2.putText(frame_copy, 'Current Image: %s' % img, (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 2)
+    cv2.putText(frame_copy, 'Current Image: %s' % img, (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 2)
 
     # Show letter positions
     cv2.rectangle(frame_copy, (current_loc_r1[0], current_loc_r1[1] + 218),
@@ -98,7 +100,9 @@ for img in glob.glob("Images/Samples/*.BMP"):
     cv2.imshow('Region3', current_result_r3)
     cv2.imshow('Region4', current_result_r4)
     cv2.imshow('Matching Result', frame_copy)
+    #cv2.imwrite('Example_Result.jpg', frame_copy)
     cv2.moveWindow('Region 4', 340, 300)
+
 
     print(img)
     print(current_string_r1, current_string_r2, current_string_r3, current_string_r4)

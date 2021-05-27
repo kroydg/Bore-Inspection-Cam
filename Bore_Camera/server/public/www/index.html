@@ -1,32 +1,85 @@
 <html>
     
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <div class="main">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <div id="header">
         <h1> <br> <center> BL Final Inspection Bore Stamp Camera </center> <br> </h1>
-        <h2> <center> Adjust Camera Properties Here</center> </h2>
-        <p> <span style="padding-left:60px">Image Display</span> </p>
-        <span style="padding-left:60px"><img id="mainImg" src="./image_00001.bmp"/></span>
-        <!-- image has to be a file saved locally -->
-    <div>
-    <div class="absolute">
-        <p> Current Exposure: <p id="expDisplay"></p> </p> 
-        <p> Current Brightness: <p id="briDisplay"></p> </p> 
-        <button id="saveExp" class="btn btn-primary">Save Exposure </button>
-        <input id = "expInput" placeholder="Enter New Exposure"></input><br /> 
-        <br /> 
-        <button id="savebrightness" class="btn btn-primary">Save Brightness </button>
-        <input id = "briInput" placeholder="Enter New Brightness"></input><br /> 
-        <br />
+        <h2> <center> Adjust Camera Properties Here</center> </h2>  
     </div>
-    <style>
-        .absolute {
-            position: absolute;
-            left: 800px;
-            top: 350px;
-        }
-        #mainImg {
-            transform: rotate(180deg);
 
+    <div id="wrapper">
+        <div id="display">
+            
+            <p> Image Display</span> </p>
+            <img id="mainImg" src="./Image00410.BMP"/></span>
+            <!-- image has to be a file saved locally -->
+        </div>
+        <div id="control">
+            <p> Recognized String: <p id="recogString">A A A A</p> </p> 
+            <p> Current Exposure: <p id="expDisplay"></p> </p> 
+            <p> Current Brightness: <p id="briDisplay"></p> </p> 
+            <button id="saveExp" class="btn btn-primary">Save Exposure </button>
+            <input id = "expInput" placeholder="Enter New Exposure"></input><br /> 
+            <br /> 
+            <button id="savebrightness" class="btn btn-primary">Save Brightness </button>
+            <input id = "briInput" placeholder="Enter New Brightness"></input><br /> 
+            <br />
+            <button id="ReadImg" class="btn btn-primary">View Processed Results</button>
+        </div>
+    </div>
+   
+    <style>
+        #ReadImg {
+            width: 260px;
+            height: 60px;
+        }
+        #recogString {
+            font-weight: bold;
+            font-size: 100px;
+            color:transparent
+        }
+        #wrapper {
+            display:flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-evenly;
+            
+
+        }
+        #header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+
+        }
+        @media screen and (max-width: 768px) {
+            body {
+                width: fit-content;
+            }
+
+            #ReadImg {
+            width: 160px;
+            height: 60px;
+            }
+            #recogString {
+                font-weight: bold;
+                font-size: 100px;
+                color:transparent
+            }
+            #wrapper {
+                display:flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: space-evenly;
+            }
+            
+            #header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            width: 100%;
+            }
         }
     </style>
     <script src="javascript/bstCam.js"></script>

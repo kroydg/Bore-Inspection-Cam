@@ -6,6 +6,9 @@ var expInput = document.getElementById("expInput");
 var expButton = document.getElementById("saveExp");
 var briInput = document.getElementById("briInput"); 
 var briButton = document.getElementById("savebrightness");
+var readImageBtn = document.getElementById("ReadImg");
+var recogString = document.getElementById("recogString");
+var mainImg = document.getElementById("mainImg");
 // create a http (Rest) GET request 
 // auto infer base url because on same origin 
 const url = "/configData"; 
@@ -27,6 +30,12 @@ getConfigRequest.onreadystatechange = (e) => {
 
     
 }
+readImageBtn.addEventListener("click", () => {
+    recogString.innerHTML = "A B B A";
+    recogString.style.color = "green";
+    mainImg.src = "./Example_Result.jpg";
+
+})
 expButton.addEventListener("click", () => {
 
         configData.exposure = expInput.value;
