@@ -3,83 +3,105 @@ import numpy as np
 import glob
 import time
 
-for img in glob.glob("Images/Samples/*.BMP"):
 
-    frame = cv2.imread(img,0)
-    #rotate_frame = cv2.rotate(frame, cv2.ROTATE_180)
-    frame_copy = frame.copy()
-
-    methods = [cv2.TM_CCOEFF, cv2.TM_CCOEFF_NORMED, cv2.TM_CCORR,
-               cv2.TM_CCORR_NORMED, cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]
-
+def findpattern(region):
     current_val = 0
     current_loc = []
     current_string = ''
-    region1 = frame[218:387, 0:162]
-    region2 = frame[218:387, 162:326]
-    region3 = frame[218:387, 326:477]
-    region4 = frame[218:387, 477:638]
+    current_result = []
 
     for A in glob.glob("Images/A_Template/*.jpg"):
-        template_A = cv2.imread(A,0)
-        #template_A = cv2.rotate(template_A, cv2.ROTATE_180)
-        h_A, w_A = template_A.shape
+        template_A = cv2.imread(A)
+        template_A = cv2.cvtColor(template_A, cv2.COLOR_BGR2GRAY)
 
-        result_A_R1 = cv2.matchTemplate(region1, template_A, cv2.TM_CCOEFF_NORMED)
+        result_A = cv2.matchTemplate(region, template_A, cv2.TM_CCOEFF_NORMED)
+        min_val_A, max_val_A, min_loc_A, max_loc_A = cv2.minMaxLoc(result_A)
 
-        min_val_A, max_val_A, min_loc_A, max_loc_A = cv2.minMaxLoc(result_A_R1)
-        # if method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]:
-        #     location_A = min_loc_A
-        # else:
         if max_val_A > current_val:
             current_loc = max_loc_A
             current_val = max_val_A
             current_string = 'A'
-        #bottom_right_A = (location_A[0] + w_A, location_A[1] + h_A)
+            current_result = result_A
+            h, w = template_A.shape
+        # bottom_right_A = (location_A[0] + w_A, location_A[1] + h_A)
 
     for B in glob.glob("Images/B_Template/*.jpg"):
-        template_B = cv2.imread(B, 0)
-        #template_B_bin = cv2.inRange(template_B, 0, 60)
-        #template_B = cv2.rotate(template_B, cv2.ROTATE_180)
+        template_B = cv2.imread(B)
+        template_B = cv2.cvtColor(template_B, cv2.COLOR_BGR2GRAY)
 
-        h_B, w_B = template_B.shape
-        result_B = cv2.matchTemplate(region1, template_B, cv2.TM_CCOEFF_NORMED)
-
+        result_B = cv2.matchTemplate(region, template_B, cv2.TM_CCOEFF_NORMED)
         min_val_B, max_val_B, min_loc_B, max_loc_B = cv2.minMaxLoc(result_B)
-        # if method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]:
-        #     location_B = min_loc_B
-        # else:
 
         if max_val_B > current_val:
             current_loc = max_loc_B
             current_val = max_val_B
             current_string = 'B'
+            current_result = result_B
+            h, w = template_B.shape
 
-        #bottom_right_B = (location_B[0] + w_B, location_B[1] + h_B)
+    return current_val, current_loc, current_string, current_result, h, w
 
-    # if current_val_A > current_val_B:
-    #     current_loc = location_A
-    #     bottom_right = bottom_right_A
-    #     current_string = 'A'
-    # else:
-    #     current_loc = location_B
-    #     bottom_right = bottom_right_B
-    #     current_string = 'B'
 
-    cv2.rectangle(frame_copy, (0,218), (162,387), 255, 2)
+for img in glob.glob("Images/Samples/*.BMP"):
+
+    frame = cv2.imread(img)
+    frame_copy = frame.copy()
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # methods = [cv2.TM_CCOEFF, cv2.TM_CCOEFF_NORMED, cv2.TM_CCORR,cv2.TM_CCORR_NORMED, cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]
+
+    # Define 4 search regions
+    region1 = frame[218:387, 0:162]
+    region2 = frame[218:387, 162:326]
+    region3 = frame[218:387, 326:477]
+    region4 = frame[218:387, 477:638]
+
+    cv2.rectangle(frame_copy, (0, 218), (162, 387), 255, 2)
     cv2.rectangle(frame_copy, (162, 218), (326, 387), 255, 2)
     cv2.rectangle(frame_copy, (326, 218), (477, 387), 255, 2)
     cv2.rectangle(frame_copy, (477, 218), (638, 387), 255, 2)
 
-    cv2.putText(frame_copy, current_string, (20, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 2);
-    cv2.putText(frame_copy, current_string, (182, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 2);
-    cv2.putText(frame_copy, current_string, (346, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 2);
-    cv2.putText(frame_copy, current_string, (497, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 2);
-    print(current_loc, current_string, current_val)
+    # Search within the 4 defined regions using defined function
+    current_val_r1, current_loc_r1, current_string_r1, current_result_r1, h1, w1 = findpattern(region1)
+    current_val_r2, current_loc_r2, current_string_r2, current_result_r2, h2, w2 = findpattern(region2)
+    current_val_r3, current_loc_r3, current_string_r3, current_result_r3, h3, w3 = findpattern(region3)
+    current_val_r4, current_loc_r4, current_string_r4, current_result_r4, h4, w4 = findpattern(region4)
 
-    cv2.imshow('Region1', result_B)
-    cv2.imshow('Match', frame_copy)
+    # Display result and score
+    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r1, (5, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 1)
+    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r2, (167, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 1)
+    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r3, (331, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 1)
+    cv2.putText(frame_copy, 'Matched Str = %s' % current_string_r4, (490, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 1)
 
+    cv2.putText(frame_copy, 'Confidence = %.1f' % (current_val_r1 * 100), (5, 170), cv2.FONT_HERSHEY_SIMPLEX,
+                0.5, 255, 1)
+    cv2.putText(frame_copy, 'Confidence = %.1f' % (current_val_r2 * 100), (167, 170), cv2.FONT_HERSHEY_SIMPLEX,
+                0.5, 255, 1)
+    cv2.putText(frame_copy, 'Confidence = %.1f' % (current_val_r3 * 100), (331, 170), cv2.FONT_HERSHEY_SIMPLEX,
+                0.5, 255, 1)
+    cv2.putText(frame_copy, 'Confidence = %.1f' % (current_val_r4 * 100), (490, 170), cv2.FONT_HERSHEY_SIMPLEX,
+                0.5, 255, 1)
+
+    cv2.putText(frame_copy, 'Current Image: %s' % img, (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 255, 2)
+
+    # Show letter positions
+    cv2.rectangle(frame_copy, (current_loc_r1[0], current_loc_r1[1] + 218),
+                  (current_loc_r1[0] + w1, current_loc_r1[1] + h1 + 218), (0, 255, 0), 2)
+    cv2.rectangle(frame_copy, (current_loc_r2[0] + 162, current_loc_r2[1] + 218),
+                  (current_loc_r2[0] + 162 + w2, current_loc_r2[1] + h2 + 218), (0, 255, 0), 2)
+    cv2.rectangle(frame_copy, (current_loc_r3[0] + 326, current_loc_r3[1] + 218),
+                  (current_loc_r3[0] + 326 + w3, current_loc_r3[1] + h3 + 218), (0, 255, 0), 2)
+    cv2.rectangle(frame_copy, (current_loc_r4[0] + 477, current_loc_r4[1] + 218),
+                  (current_loc_r4[0] + 477 + w4, current_loc_r4[1] + h4 + 218), (0, 255, 0), 2)
+
+    cv2.imshow('Region1', current_result_r1)
+    cv2.imshow('Region2', current_result_r2)
+    cv2.imshow('Region3', current_result_r3)
+    cv2.imshow('Region4', current_result_r4)
+    cv2.imshow('Matching Result', frame_copy)
+    cv2.moveWindow('Region 4', 340, 300)
+
+    print(img)
+    print(current_string_r1, current_string_r2, current_string_r3, current_string_r4)
 
     time.sleep(1)
     key = cv2.waitKey(1)
