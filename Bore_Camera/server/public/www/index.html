@@ -1,0 +1,35 @@
+<html>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <div class="main">
+        <h1> <br> <center> BL Final Inspection Bore Stamp Camera </center> <br> </h1>
+        <h2> <center> Adjust Camera Properties Here</center> </h2>
+        <p> <span style="padding-left:60px">Image Display</span> </p>
+        <span style="padding-left:60px"><img id="mainImg" src="./image_00001.bmp"/></span>
+        <!-- image has to be a file saved locally -->
+    <div>
+    <div class="absolute">
+        <p> Current Exposure: <p id="expDisplay"></p> </p> 
+        <p> Current Brightness: <p id="briDisplay"></p> </p> 
+        <button id="saveExp" class="btn btn-primary">Save Exposure </button>
+        <input id = "expInput" placeholder="Enter New Exposure"></input><br /> 
+        <br /> 
+        <button id="savebrightness" class="btn btn-primary">Save Brightness </button>
+        <input id = "briInput" placeholder="Enter New Brightness"></input><br /> 
+        <br />
+    </div>
+    <style>
+        .absolute {
+            position: absolute;
+            left: 800px;
+            top: 350px;
+        }
+        #mainImg {
+            transform: rotate(180deg);
+
+        }
+    </style>
+    <script src="javascript/bstCam.js"></script>
+    <!-- CSS only -->
+<link href="css/bootstrap.min.css" rel="stylesheet" >
+</html>
