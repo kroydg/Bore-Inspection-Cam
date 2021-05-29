@@ -85,7 +85,7 @@ for img in sorted(glob.glob("Images/Samples/*.BMP")):
 
     cv2.putText(frame_copy, 'Current Image: %s' % img, (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, WHITE, 2)
 
-    # Show letter positions
+    # Draw rectangle around letters to show letter positions
     cv2.rectangle(frame_copy, (current_loc_r1[0], current_loc_r1[1] + 218),
                   (current_loc_r1[0] + w1, current_loc_r1[1] + h1 + 218), (0, 255, 0), 2)
     cv2.rectangle(frame_copy, (current_loc_r2[0] + 162, current_loc_r2[1] + 218),
@@ -95,6 +95,7 @@ for img in sorted(glob.glob("Images/Samples/*.BMP")):
     cv2.rectangle(frame_copy, (current_loc_r4[0] + 477, current_loc_r4[1] + 218),
                   (current_loc_r4[0] + 477 + w4, current_loc_r4[1] + h4 + 218), (0, 255, 0), 2)
 
+    # Show Probability Map of each region
     cv2.imshow('Region1', current_result_r1)
     cv2.imshow('Region2', current_result_r2)
     cv2.imshow('Region3', current_result_r3)
